@@ -47,6 +47,8 @@
                 @endif
 
                 <x-menu-item title="Hello" icon="o-sparkles" link="/" />
+                <x-menu-item title="Carlos" icon="o-sparkles" link="/carlos" />
+                <x-menu-item title="Noticias" icon="o-newspaper" link="/post" />
                 
                 <x-menu-sub title="Settings" icon="o-cog-6-tooth">
                     <x-menu-item title="Wifi" icon="o-wifi" link="####" />

@@ -10,6 +10,7 @@ Route::get('/', function () {
 
 Volt::route('/login', 'login')->name('login');
 
+
 Route::get('/logout', function () {
   auth()->logout();
   request()->session()->invalidate();
@@ -20,5 +21,8 @@ Route::get('/logout', function () {
 
 // Protected routes
 Route::middleware('auth')->group(function () {
+  Volt::route('/register', 'register')->name('register');
   Volt::route('/users', 'users.index');
+  Volt::route('/carlos', 'carlos');
+  Volt::route('/post', 'postcrud');
 });
