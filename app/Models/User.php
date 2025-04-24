@@ -45,4 +45,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function caca($algo)
+    {
+        //uppercase
+        return strtoupper($algo);
+    }
 }
