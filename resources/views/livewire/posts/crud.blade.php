@@ -3,10 +3,11 @@
 use Livewire\Volt\Component;
 use App\Models\Post;
 use Mary\Traits\Toast;
-
+use Livewire\WithFileUploads;
+use Livewire\Attributes\Validate;
 
 new class extends Component {
-    use Toast;
+    use Toast, WithFileUploads;
     //Estructura de registro de un post
     public $data = [
         'title' => '',
@@ -16,6 +17,17 @@ new class extends Component {
         'image' => '',
         'status' => '',
     ];
+
+    public $categories = [
+        ['id' => 'general', 'name' => 'General'],
+        ['id' => '15', 'name' => 'Quinces'],
+        ['id' => 'weddings', 'name' => 'Casamientos'],
+        ['id' => 'birthdays', 'name' => 'Cumpleaños'],
+    ];
+
+    #[Validate('nullable|image|max:2048')]
+    public $photo;
+
     public $post;
 
     public function mount(Post $post)
@@ -62,14 +74,16 @@ new class extends Component {
             'image' => '',
             'status' => 'draft',
         ];
-
     }
 
+    public function saveImage()
+    {
+        $this->photo->store(path: '/assets/images/');
+    }
 }; ?>
 
 <div>
     {{-- colocar el nombre de la app desde .env --}}
-
     <x-card title="{{ config('app.name') }}" subtitle="{{ isset($post) ? 'Update' : 'Create' }}" shadow separator>
         <x-form wire:submit="save" no-separator>
             <x-input label="Título" wire:model="data.title" />
@@ -83,16 +97,14 @@ new class extends Component {
             @endphp
             <x-editor wire:model="data.content" label="Contenido" :config="$config" />
             <x-input label="Autor" wire:model="data.author" />
-            <x-select label="Categoría" wire:model="data.category" :options="[
-        ['id' => 'general', 'name' => 'General'],
-        ['id' => '15', 'name' => 'Quinces'],
-        ['id' => 'weddings', 'name' => 'Casamientos'],
-        ['id' => 'birthdays', 'name' => 'Cumpleaños'],
-    ]" icon="o-rectangle-stack" />
+            <x-select label="Categoría" wire:model="data.category" :options="$categories" icon="o-rectangle-stack" />
             <x-input label="Imagen" wire:model="data.image" />
+            <x-file wire:model="photo" accept="image/png, image/jpeg" >
+                <img src="{{ $data['image'] ?? asset('/assets/images/empty.jpg') }}" class="h-40 rounded-lg" />
+            </x-file>
             <x-input label="Estado" wire:model="data.status" />
             <x-slot:actions>
-                <x-button label="{{ isset($post) ? 'Actualizar' : 'Crer' }}" class="btn-primary" type="submit"
+                <x-button label="{{ isset($post) ? 'Actualizar' : 'Crear' }}" class="btn-primary" type="submit"
                     spinner="save" />
             </x-slot:actions>
         </x-form>
