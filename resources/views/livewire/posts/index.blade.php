@@ -27,8 +27,17 @@ new class extends Component {
   // Delete action
   public function delete(Post $post): void
   {
+
     $post->delete();
-    $this->warning("$post->name deleted", 'Good bye!', position: 'toast-bottom');
+    // delete image if exists
+    if ($post->image) {
+      // Asegurarse de que la imagen antigua existe antes de intentar eliminarla
+      if (\Storage::disk('public')->exists($post->image)) {
+        \Storage::disk('public')->delete($post->image);
+      }
+    }
+    $this->warning("$post->name deleted", position: 'toast-bottom');
+    $this->resetPage();
   }
 
   // Table headers
@@ -37,7 +46,7 @@ new class extends Component {
     return [
       ['key' => 'id', 'label' => '#', 'class' => 'w-1'],
       ['key' => 'title', 'label' => 'Titulo', 'class' => 'w-64'],
-      ['key' => 'category', 'label' => 'Categoria'], 
+      ['key' => 'category', 'label' => 'Categoria'],
       ['key' => 'status', 'label' => 'Estado'],
     ];
   }
