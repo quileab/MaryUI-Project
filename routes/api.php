@@ -33,3 +33,12 @@ Route::get('/user/{id}', function ($id) {
     }
     return response()->json($user);
 });
+// return all posts with attribute status published
+Route::get('/posts/{category?}', function ($category = null) {
+    $query = \App\Models\Post::where('status', 'published')
+        ->when($category, function ($query) use ($category) {
+            return $query->where('category', $category);
+        });
+    $posts = $query->get();
+    return response()->json($posts);
+});

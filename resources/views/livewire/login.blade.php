@@ -29,7 +29,7 @@ class extends Component {
         if (auth()->attempt($credentials)) {
             request()->session()->regenerate();
  
-            return redirect()->intended('/');
+            return redirect()->intended('/posts');
         }
  
         $this->addError('email', 'The provided credentials do not match our records.');

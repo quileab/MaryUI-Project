@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 // route to web /
 Route::get('/', function () {
-  return view('index');
+  return redirect('/posts');
+  //return view('index');
 });
 
 Volt::route('/login', 'login')->name('login');
